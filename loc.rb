@@ -19,9 +19,10 @@ tmp_dir = File.expand_path "./tmp", File.dirname(__FILE__)
 FileUtils.rm_rf tmp_dir
 FileUtils.mkdir_p tmp_dir
 
-org = ARGV[0].strip
 client = Octokit::Client.new access_token: ENV["GITHUB_TOKEN"]
-repos = client.organization_repositories(org, type: 'sources')
+Octokit.auto_paginate = true
+
+repos = client.organization_repositories(ARGV[0].strip, type: 'sources')
 puts "Found #{repos.count} repos. Counting..."
 
 reports = []
