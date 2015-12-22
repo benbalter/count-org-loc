@@ -7,6 +7,10 @@
 3. `script/bootstrap`
 4. `script/count [ORG_NAME]`
 
+## How it works
+
+It uses [Octokit.rb](https://github.com/octokit/octokit.rb) to fetch a list of your organization's repositories (public or public and private), and [Cloc](https://github.com/AlDanial/cloc) to count the lines of code, number of files, comments, etc.
+
 ## Example output for @whitehouse
 
 ```
@@ -69,4 +73,4 @@ SUM:                           1079          18375          34403         103410
 
 ## Counting private repositories
 
-To look at private repositories, you'll need to pass a [personal access token](https://github.com/settings/tokens/new) with `repo` scope as `GITHUB_TOKEN`. You can do this by adding `GITHUB_TOKEN=[TOKEN]` to a `.env` file in the repository's root. 
+To look at private repositories, you'll need to pass a [personal access token](https://github.com/settings/tokens/new) with `repo` scope as `GITHUB_TOKEN`. You can do this by adding `GITHUB_TOKEN=[TOKEN]` to a `.env` file in the repository's root.
