@@ -31,11 +31,13 @@ repos.each do |repo|
   destination = File.expand_path repo.name, tmp_dir
   report_file = File.expand_path "#{repo.name}.txt", tmp_dir
 
-  output, status = Open3.capture2e "git", "clone", "--depth", "1", "--quiet", repo.clone_url, destination
+  clone_url = repo.clone_url
+  clone_url = clone_url.sub "//", "//#{ENV["GITHUB_TOKEN"]}:x-oauth-basic@" if ENV["GITHUB_TOKEN"]
+  output, status = Open3.capture2e "git", "clone", "--depth", "1", "--quiet", clone_url, destination
   next unless status.exitstatus == 0
 
   output, status = cloc destination, "--quiet", "--report-file=#{report_file}"
-  reports.push(report_file) if File.exists?(report_file)# && status.exitstatus == 0
+  reports.push(report_file) if File.exists?(report_file) && status.exitstatus == 0
 end
 
 puts "Done. Summing..."
