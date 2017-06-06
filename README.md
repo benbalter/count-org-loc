@@ -3,8 +3,9 @@
 ## Usage
 
 1. `git clone https://github.com/benbalter/count-org-loc && cd count-org-loc`
-2. `script/bootstrap`
-3. `script/count [ORG_NAME]`
+2. `gem install bundler`
+3. `script/bootstrap`
+4. `script/count [ORG_NAME]`
 
 ## How it works
 
