@@ -20,7 +20,7 @@ FileUtils.rm_rf tmp_dir
 FileUtils.mkdir_p tmp_dir
 
 client = Octokit::Client.new access_token: ENV["GITHUB_TOKEN"]
-Octokit.auto_paginate = true
+client.auto_paginate = true
 
 repos = client.organization_repositories(ARGV[0].strip, type: 'sources')
 puts "Found #{repos.count} repos. Counting..."
