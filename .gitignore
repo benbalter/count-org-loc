@@ -1,2 +1,4 @@
 tmp
+*.lock
 .env
+.idea/
