@@ -19,6 +19,13 @@ tmp_dir = File.expand_path "./tmp", File.dirname(__FILE__)
 FileUtils.rm_rf tmp_dir
 FileUtils.mkdir_p tmp_dir
 
+# Enabling support for GitHub Enterprise
+unless ENV["GITHUB_ENTERPRISE_URL"].nil?
+  Octokit.configure do |c|
+    c.api_endpoint = ENV["GITHUB_ENTERPRISE_URL"]
+  end
+end
+
 client = Octokit::Client.new access_token: ENV["GITHUB_TOKEN"]
 client.auto_paginate = true
 
