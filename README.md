@@ -77,8 +77,9 @@ To look at private repositories, you'll need to pass a [personal access token](h
 
 If you are working with GitHub Enterprise and want to change your URL, simply add `GITHUB_ENTERPRISE_URL=https://<ghe-url>/api/v3` to the `.env` file
 
-```
-Sample `.env` File
+
+Sample `.env` File :
+
 ```bash
 GITHUB_TOKEN="<token>"
 GITHUB_ENTERPRISE_URL="https://my-ghe.local/api/v3"
