@@ -32,7 +32,11 @@ end
 client = Octokit::Client.new access_token: ENV['GITHUB_TOKEN']
 client.auto_paginate = true
 
-repos = client.organization_repositories(ARGV[0].strip, type: 'sources')
+begin
+  repos = client.organization_repositories(ARGV[0].strip, type: 'sources')
+rescue
+  repos = client.repositories(ARGV[0].strip, type: 'sources')
+end
 puts "Found #{repos.count} repos. Counting..."
 
 reports = []
