@@ -5,11 +5,11 @@
 1. `git clone https://github.com/benbalter/count-org-loc && cd count-org-loc`
 2. `gem install bundler`
 3. `script/bootstrap`
-4. `script/count [ORG_NAME]`
+4. `script/count [ORG_NAME | USER_NAME]`
 
 ## How it works
 
-It uses [Octokit.rb](https://github.com/octokit/octokit.rb) to fetch a list of your organization's repositories (public or public and private), and [Cloc](https://github.com/AlDanial/cloc) to count the lines of code, number of files, comments, etc.
+It uses [Octokit.rb](https://github.com/octokit/octokit.rb) to fetch a list of your organization's (or user's) repositories (public or public and private), and [Cloc](https://github.com/AlDanial/cloc) to count the lines of code, number of files, comments, etc.
 
 ## Example output for @whitehouse
 
