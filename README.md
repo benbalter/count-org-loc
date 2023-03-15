@@ -9,7 +9,7 @@
 
 ## How it works
 
-It uses [Octokit.rb](https://github.com/octokit/octokit.rb) to fetch a list of your organization's (or user's) repositories (public or public and private), and [Cloc](https://github.com/AlDanial/cloc) to count the lines of code, number of files, comments, etc.
+It uses [Octokit.rb](https://github.com/octokit/octokit.rb) to fetch a list of your organization's (or user's) repositories (public or public and private), clone each, and [Cloc](https://github.com/AlDanial/cloc) to count the lines of code, number of files, comments, etc.
 
 ## Example output for @whitehouse
 
