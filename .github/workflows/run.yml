@@ -1,7 +1,13 @@
 name: run
 on:
-  - push
-  - workflow_dispatch
+  push: {}
+  workflow_dispatch: 
+    inputs:
+      org_or_user:
+        description: 'The org (or user) to calculate total lines of code'
+        required: false
+        default: 'balter-test-org'
+        type: string
 jobs:
   run:
     runs-on: macos-latest
@@ -18,4 +24,4 @@ jobs:
         run: script/bootstrap
       
       - name: count
-        run: script/count balter-test-org
+        run: script/count ${{ inputs.org_or_user }}
