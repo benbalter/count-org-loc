@@ -6,7 +6,6 @@ on:
       org_or_user:
         description: 'The org (or user) to calculate total lines of code'
         required: false
-        default: 'balter-test-org'
         type: string
 jobs:
   run:
