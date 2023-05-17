@@ -7,6 +7,21 @@
 3. `script/bootstrap`
 4. `script/count [ORG_NAME | USER_NAME]`
 
+## Usage via GitHub Actions
+
+Don't want to set up a local development environment? You can run this script via GitHub Actions:
+
+1. Fork this repository into your account
+2. Navigate to the "Actions" tab of your fork
+3. Click the "run" workflow on the left side
+4. Click "Run workflow" on the right side
+5. Enter your org. or user name that you'd like to count lines of code for
+6. Click "Run Workflow"
+
+You'll see the progress and count(s) in the job output (also available from the Actions tab).
+
+Note: If you'd like to count private repositories, as described below, you'll need to set a `GITHUB_TOKEN` GitHub Actions secret.
+
 ## How it works
 
 It uses [Octokit.rb](https://github.com/octokit/octokit.rb) to fetch a list of your organization's (or user's) repositories (public or public and private), clone each, and [Cloc](https://github.com/AlDanial/cloc) to count the lines of code, number of files, comments, etc.
