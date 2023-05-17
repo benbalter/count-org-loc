@@ -23,5 +23,10 @@ jobs:
       - name: script/bootstrap
         run: script/bootstrap
       
-      - name: count
+      - name: count workflow dispatch
+        if: github.event_name == 'workflow_dispatch'
         run: script/count ${{ inputs.org_or_user }}
+      
+      - name: default count
+        if: github.event_name != 'workflow_dispatch'
+        run: script/count balter-test-org
