@@ -1,0 +1,20 @@
+name: run
+on:
+  - push
+  - workflow_dispatch
+jobs:
+  run:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: script/bootstrap
+        run: script/bootstrap
+      
+      - name: count
+        run: script/count balter-test-org

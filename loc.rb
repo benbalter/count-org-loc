@@ -34,7 +34,7 @@ client.auto_paginate = true
 
 begin
   repos = client.organization_repositories(ARGV[0].strip, type: 'sources')
-rescue
+rescue StandardError
   repos = client.repositories(ARGV[0].strip, type: 'sources')
 end
 puts "Found #{repos.count} repos. Counting..."
