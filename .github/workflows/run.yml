@@ -1,6 +1,5 @@
 name: run
 on:
-  push: {}
   workflow_dispatch: 
     inputs:
       org_or_user:
