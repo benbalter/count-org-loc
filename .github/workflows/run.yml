@@ -12,7 +12,6 @@ jobs:
 
 
       - uses: ruby/setup-ruby@v1
-        working-directory: script
         with:
           bundler-cache: true
           ruby-version: 3.0
