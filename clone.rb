@@ -41,7 +41,6 @@ repos.each do |repo|
   clone_url = clone_url.sub '//', "//#{ENV['GITHUB_TOKEN']}:x-oauth-basic@" if ENV['GITHUB_TOKEN']
   _output, status = Open3.capture2e 'git', 'clone', '--depth', '1', '--quiet', clone_url, destination
   next unless status.exitstatus.zero?
-
 end
 
 puts 'Done. Summing...'

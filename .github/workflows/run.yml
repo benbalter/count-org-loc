@@ -19,9 +19,10 @@ jobs:
         run: script/bootstrap
       
       - name: clone repos
-        run: script/clone ZscalerCWP
+        working-directory: script
+        run: clone ZscalerCWP
 
       - name: count
-        working-directory: count-org-loc/count-org-loc
-        run: script/stats.sh
+        working-directory: script
+        run: stats.sh
         shell: bash   
