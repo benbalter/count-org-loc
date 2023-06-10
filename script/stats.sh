@@ -1,4 +1,4 @@
 #!/bin/bash
 
 pwd
-ls -lrt
+ls -lrt tmp
