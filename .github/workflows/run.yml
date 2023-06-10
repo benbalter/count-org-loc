@@ -22,5 +22,6 @@ jobs:
         run: script/clone ZscalerCWP
 
       - name: count
+        working-directory: count-org-loc/count-org-loc
         run: script/stats.sh
         shell: bash   
