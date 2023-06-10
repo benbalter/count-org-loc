@@ -6,11 +6,6 @@ require 'cliver'
 require 'fileutils'
 require 'dotenv'
 
-if ARGV.count != 1
-  puts 'Usage: script/count [ORG NAME]'
-  exit 1
-end
-
 Dotenv.load
 
 def cloc(*args)
@@ -32,21 +27,16 @@ end
 client = Octokit::Client.new access_token: ENV['GITHUB_TOKEN']
 client.auto_paginate = true
 
-begin
-  repos = client.organization_repositories(ARGV[0].strip, type: 'sources')
-rescue StandardError
-  repos = client.repositories(ARGV[0].strip, type: 'sources')
-end
-puts "Found #{repos.count} repos. Counting..."
+repos=File.readlines('repositories.cfg')
 
 reports = []
 repos.each do |repo|
-  puts "Counting #{repo.name}..."
+  repo=repo.strip
+  puts "Counting #{repo}..."
+  destination = File.expand_path repo, tmp_dir
+  report_file = File.expand_path "#{repo}.txt", tmp_dir
 
-  destination = File.expand_path repo.name, tmp_dir
-  report_file = File.expand_path "#{repo.name}.txt", tmp_dir
-
-  clone_url = repo.clone_url
+  clone_url = "https://github.com/ZscalerCWP/#{repo}.git"
   clone_url = clone_url.sub '//', "//#{ENV['GITHUB_TOKEN']}:x-oauth-basic@" if ENV['GITHUB_TOKEN']
   _output, status = Open3.capture2e 'git', 'clone', '--depth', '1', '--quiet', clone_url, destination
   next unless status.exitstatus.zero?

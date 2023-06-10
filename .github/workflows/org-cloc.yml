@@ -1,6 +1,11 @@
-name: run
+name: Org stats
 on:
   workflow_dispatch: 
+    inputs:
+      org_or_user:
+        description: 'The org (or user) to calculate total lines of code'
+        required: false
+        type: string
 jobs:
   run:
     runs-on: macos-latest
@@ -19,8 +24,5 @@ jobs:
         run: script/bootstrap
       
       - name: count workflow dispatch
-        run: script/clone
-
-      - name: count workflow dispatch
-        run: script/stats.sh
-        shell: bash   
+        if: github.event_name == 'workflow_dispatch'
+        run: script/count ${{ inputs.org_or_user }}

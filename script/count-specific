@@ -1,0 +1,4 @@
+#!/bin/sh
+# Usage: script/count [ORG NAME]
+
+bundle exec ruby loc-specific.rb $1

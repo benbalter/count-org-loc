@@ -50,12 +50,5 @@ repos.each do |repo|
   clone_url = clone_url.sub '//', "//#{ENV['GITHUB_TOKEN']}:x-oauth-basic@" if ENV['GITHUB_TOKEN']
   _output, status = Open3.capture2e 'git', 'clone', '--depth', '1', '--quiet', clone_url, destination
   next unless status.exitstatus.zero?
-
-  _output, _status = cloc destination, '--quiet', "--report-file=#{report_file}"
-  reports.push(report_file) if File.exist?(report_file) && status.exitstatus.zero?
 end
 
-puts 'Done. Summing...'
-
-output, _status = cloc '--sum-reports', *reports
-puts output.gsub(%r{^#{Regexp.escape tmp_dir}/(.*)\.txt}) { Regexp.last_match(1) + ' ' * (tmp_dir.length + 5) }
