@@ -5,5 +5,5 @@ while read -r line; do
   IFS=' ' read -r array <<< "$cloc_out"
   echo "Repository: $line \nFiles: ${array[1]} \nblank: ${array[2]} \nComment: ${array[3]} \nTotal LOC: ${array[4]}"
   echo "--------------------------------------------------"
-done <repositories.cfg
+done <../repositories.cfg
 cd ..
