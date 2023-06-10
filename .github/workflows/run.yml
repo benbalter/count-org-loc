@@ -18,9 +18,9 @@ jobs:
       - name: script/bootstrap
         run: script/bootstrap
       
-      - name: count workflow dispatch
+      - name: clone repos
         run: script/clone ZscalerCWP
 
-      - name: count workflow dispatch
+      - name: count
         run: script/stats.sh
         shell: bash   
