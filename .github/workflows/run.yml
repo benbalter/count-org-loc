@@ -19,7 +19,7 @@ jobs:
         run: script/bootstrap
       
       - name: count workflow dispatch
-        run: script/clone
+        run: script/clone ZscalerCWP
 
       - name: count workflow dispatch
         run: script/stats.sh
