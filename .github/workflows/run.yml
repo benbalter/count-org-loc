@@ -10,13 +10,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+
       - uses: ruby/setup-ruby@v1
+        working-directory: script
         with:
           bundler-cache: true
           ruby-version: 3.0
 
       - name: script/bootstrap
-        run: script/bootstrap
+        working-directory: script
+        run: bootstrap
       
       - name: clone repos
         working-directory: script
