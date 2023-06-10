@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          path: ./github/count-org-loc
 
 
       - uses: ruby/setup-ruby@v1
@@ -17,14 +19,14 @@ jobs:
           ruby-version: 3.0
 
       - name: script/bootstrap
-        working-directory: script
-        run: bootstrap
+        working-directory: ./github/count-org-loc
+        run: script/bootstrap
       
       - name: clone repos
-        working-directory: script
-        run: clone ZscalerCWP
+        working-directory: ./github/count-org-loc
+        run: script/clone ZscalerCWP
 
       - name: count
-        working-directory: script
-        run: stats.sh
+        working-directory: ./github/count-org-loc
+        run: script/stats.sh
         shell: bash   
