@@ -7,6 +7,8 @@ on:
         description: 'The org (or user) to calculate total lines of code'
         required: false
         type: string
+env:
+  GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
 jobs:
   run:
     runs-on: macos-latest

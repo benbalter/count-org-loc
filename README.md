@@ -20,7 +20,7 @@ Don't want to set up a local development environment? You can run this script vi
 
 You'll see the progress and count(s) in the job output (also available from the Actions tab).
 
-Note: If you'd like to count private repositories, as described below, you'll need to set a `GITHUB_TOKEN` GitHub Actions secret.
+Note: If you'd like to count private repositories, as described below, you'll need to set an `ORG_GITHUB_TOKEN` GitHub Actions secret with your PAT.
 
 ## How it works
 

@@ -1,0 +1,59 @@
+name: Get Lines of Code for GitHub Organizations
+on:
+  workflow_dispatch:
+    inputs:
+      test_org_name:
+        description: 'Name of the TEST environment GitHub Organization(s)'
+        required: true
+        default: ''
+      prod_org_name:
+        description: 'Name of the PROD environment GitHub Organization(s)'
+        required: true
+        default: ''
+env:
+  GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: 3.0
+
+      - name: Install Dependencies and Cleanup
+        run: sudo apt-get install -y cloc
+
+      - name: Calculating LoC for each org
+        run: |
+          IFS=',' read -ra ORGS <<< "${{ github.event.inputs.test_org_name }}"
+          for org in "${ORGS[@]}"; do
+            bundle exec ruby loc.rb "$org"
+          done
+  prod:
+    timeout-minutes: 60
+    needs: test
+    #May need to add a "Pay as you go", larger GitHub-hosted runner depending on the size of each repo
+    #See https://docs.github.com/en/actions/using-github-hosted-runners/about-larger-runners/about-larger-runners
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: 3.0
+
+      - name: Install Dependencies and Cleanup
+        run: sudo apt-get install -y cloc
+
+      - name: Calculating LoC for each org
+        run: |
+          IFS=',' read -ra ORGS <<< "${{ github.event.inputs.prod_org_name }}"
+          for org in "${ORGS[@]}"; do
+            bundle exec ruby loc.rb "$org"
+          done
