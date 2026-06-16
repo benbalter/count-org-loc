@@ -37,6 +37,7 @@ begin
 rescue StandardError
   repos = client.repositories(ARGV[0].strip, type: 'sources')
 end
+repos = repos.reject(&:archived)
 puts "Found #{repos.count} repos. Counting..."
 
 reports = []
