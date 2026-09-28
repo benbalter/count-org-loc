@@ -10,8 +10,12 @@ on:
         description: 'Name of the PROD environment GitHub Organization(s)'
         required: true
         default: ''
+permissions:
+  contents: read
 env:
-  GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+  # Fall back to the workflow token (public repos, authenticated rate limit)
+  # when the ORG_GITHUB_TOKEN secret for private repos isn't configured.
+  GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN || github.token }}
 jobs:
   test:
     runs-on: ubuntu-latest

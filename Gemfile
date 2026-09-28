@@ -5,5 +5,8 @@ source 'https://rubygems.org'
 gem 'cliver'
 gem 'dotenv'
 gem 'octokit'
-gem 'rubocop'
-gem 'rubocop-performance'
+
+group :development do
+  gem 'rubocop'
+  gem 'rubocop-performance'
+end

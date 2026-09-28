@@ -2,6 +2,5 @@
 
 set -x
 
-brew tap Homebrew/bundle
 brew bundle install
 bundle install

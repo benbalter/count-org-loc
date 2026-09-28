@@ -7,8 +7,12 @@ on:
         description: 'The org (or user) to calculate total lines of code'
         required: false
         type: string
+permissions:
+  contents: read
 env:
-  GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+  # Fall back to the workflow token (public repos, authenticated rate limit)
+  # when the ORG_GITHUB_TOKEN secret for private repos isn't configured.
+  GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN || github.token }}
 jobs:
   run:
     runs-on: macos-latest
