@@ -30,7 +30,15 @@ unless ENV['GITHUB_ENTERPRISE_URL'].nil?
   end
 end
 
-client = Octokit::Client.new access_token: ENV['GITHUB_TOKEN']
+# Treat a blank GITHUB_TOKEN as unset. The Actions workflows set it from a
+# secret that expands to an empty string when not configured, and sending an
+# empty token gets a 401 instead of unauthenticated access to public repos.
+def github_token
+  token = ENV['GITHUB_TOKEN'].to_s.strip
+  token unless token.empty?
+end
+
+client = Octokit::Client.new access_token: github_token
 client.auto_paginate = true
 
 owner = ARGV[0].strip
@@ -46,10 +54,10 @@ puts "Found #{repos.count} repos. Counting..."
 # messages, and the process list. The header is scoped to the clone URL's
 # origin so it isn't sent to any other host.
 def git_env(clone_url)
-  return {} unless ENV['GITHUB_TOKEN']
+  return {} unless github_token
 
   origin = URI(clone_url)
-  credentials = ["#{ENV['GITHUB_TOKEN']}:x-oauth-basic"].pack('m0')
+  credentials = ["#{github_token}:x-oauth-basic"].pack('m0')
   {
     'GIT_CONFIG_COUNT' => '1',
     'GIT_CONFIG_KEY_0' => "http.#{origin.scheme}://#{origin.host}/.extraHeader",
