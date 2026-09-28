@@ -68,8 +68,8 @@ repos.each do |repo|
   _output, status = Open3.capture2e git_env(repo.clone_url), *clone_args
   next unless status.exitstatus.zero?
 
-  _output, _status = cloc destination, '--quiet', "--report-file=#{report_file}"
-  reports.push(report_file) if File.exist?(report_file) && status.exitstatus.zero?
+  _output, cloc_status = cloc destination, '--quiet', "--report-file=#{report_file}"
+  reports.push(report_file) if File.exist?(report_file) && cloc_status.success?
 end
 
 puts 'Done. Summing...'
