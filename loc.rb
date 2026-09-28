@@ -2,6 +2,7 @@
 
 require 'octokit'
 require 'open3'
+require 'uri'
 require 'cliver'
 require 'fileutils'
 require 'tmpdir'
@@ -39,6 +40,22 @@ rescue StandardError
 end
 puts "Found #{repos.count} repos. Counting..."
 
+# Pass the token to git as an HTTP header via environment config rather than
+# embedding it in the clone URL, where it would end up in .git/config, error
+# messages, and the process list. The header is scoped to the clone URL's
+# origin so it isn't sent to any other host.
+def git_env(clone_url)
+  return {} unless ENV['GITHUB_TOKEN']
+
+  origin = URI(clone_url)
+  credentials = ["#{ENV['GITHUB_TOKEN']}:x-oauth-basic"].pack('m0')
+  {
+    'GIT_CONFIG_COUNT' => '1',
+    'GIT_CONFIG_KEY_0' => "http.#{origin.scheme}://#{origin.host}/.extraHeader",
+    'GIT_CONFIG_VALUE_0' => "Authorization: Basic #{credentials}"
+  }
+end
+
 reports = []
 repos.each do |repo|
   puts "Counting #{repo.name}..."
@@ -46,9 +63,8 @@ repos.each do |repo|
   destination = File.expand_path repo.name, tmp_dir
   report_file = File.expand_path "#{repo.name}.txt", tmp_dir
 
-  clone_url = repo.clone_url
-  clone_url = clone_url.sub '//', "//#{ENV['GITHUB_TOKEN']}:x-oauth-basic@" if ENV['GITHUB_TOKEN']
-  _output, status = Open3.capture2e 'git', 'clone', '--depth', '1', '--quiet', clone_url, destination
+  clone_args = ['git', 'clone', '--depth', '1', '--quiet', repo.clone_url, destination]
+  _output, status = Open3.capture2e git_env(repo.clone_url), *clone_args
   next unless status.exitstatus.zero?
 
   _output, _status = cloc destination, '--quiet', "--report-file=#{report_file}"
