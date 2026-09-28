@@ -4,6 +4,7 @@ require 'octokit'
 require 'open3'
 require 'cliver'
 require 'fileutils'
+require 'tmpdir'
 require 'dotenv'
 
 if ARGV.count != 1
@@ -18,9 +19,8 @@ def cloc(*args)
   Open3.capture2e(cloc_path, *args)
 end
 
-tmp_dir = File.expand_path './tmp', File.dirname(__FILE__)
-FileUtils.rm_rf tmp_dir
-FileUtils.mkdir_p tmp_dir
+tmp_dir = Dir.mktmpdir('count-org-loc')
+at_exit { FileUtils.remove_entry(tmp_dir) }
 
 # Enabling support for GitHub Enterprise
 unless ENV['GITHUB_ENTERPRISE_URL'].nil?
