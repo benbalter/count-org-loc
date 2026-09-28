@@ -33,11 +33,12 @@ end
 client = Octokit::Client.new access_token: ENV['GITHUB_TOKEN']
 client.auto_paginate = true
 
-begin
-  repos = client.organization_repositories(ARGV[0].strip, type: 'sources')
-rescue StandardError
-  repos = client.repositories(ARGV[0].strip, type: 'sources')
-end
+owner = ARGV[0].strip
+repos = if client.user(owner).type == 'Organization'
+          client.organization_repositories(owner, type: 'sources')
+        else
+          client.repositories(owner, type: 'sources')
+        end
 puts "Found #{repos.count} repos. Counting..."
 
 # Pass the token to git as an HTTP header via environment config rather than
