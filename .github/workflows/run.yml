@@ -1,6 +1,8 @@
 name: run
 on:
-  push: {}
+  push:
+    branches: [master]
+  pull_request: {}
   workflow_dispatch: 
     inputs:
       org_or_user:
@@ -28,6 +30,9 @@ jobs:
       - name: script/bootstrap
         run: script/bootstrap
       
+      - name: rubocop
+        run: bundle exec rubocop
+
       - name: count workflow dispatch
         if: github.event_name == 'workflow_dispatch'
         run: script/count ${{ inputs.org_or_user }}
