@@ -82,5 +82,10 @@ end
 
 puts 'Done. Summing...'
 
+if reports.empty?
+  puts "No repositories with countable code found for #{owner}."
+  exit 0
+end
+
 output, _status = cloc '--sum-reports', *reports
 puts output.gsub(%r{^#{Regexp.escape tmp_dir}/(.*)\.txt}) { Regexp.last_match(1) + ' ' * (tmp_dir.length + 5) }
