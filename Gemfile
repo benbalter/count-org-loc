@@ -7,6 +7,7 @@ gem 'dotenv'
 gem 'octokit'
 
 group :development do
+  gem 'minitest'
   gem 'rubocop'
   gem 'rubocop-performance'
 end

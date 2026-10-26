@@ -90,6 +90,8 @@ SUM:                           1079          18375          34403         103410
 
 To look at private repositories, you'll need to pass a [personal access token](https://github.com/settings/tokens/new) with `repo` scope as `GITHUB_TOKEN`. You can do this by adding `GITHUB_TOKEN=[TOKEN]` to a `.env` file in the repository's root.
 
+Private repositories of a user account are only counted when you're counting your own account (the user the token belongs to). Counting another user's account only includes their public repositories.
+
 If you are working with GitHub Enterprise and want to change your URL, simply add `GITHUB_ENTERPRISE_URL=https://<ghe-url>/api/v3` to the `.env` file
 
 

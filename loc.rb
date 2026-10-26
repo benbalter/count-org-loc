@@ -41,12 +41,29 @@ end
 client = Octokit::Client.new access_token: github_token
 client.auto_paginate = true
 
+# Login of the token's user, or nil when the token has no user identity (for
+# example the Actions `github.token`, which gets a 403 on GET /user).
+def authenticated_login(client)
+  client.user.login
+rescue Octokit::Forbidden, Octokit::Unauthorized
+  nil
+end
+
+# List the repositories to count. `GET /users/{owner}/repos` only returns public
+# repositories, so when counting the authenticated user's own account use
+# `GET /user/repos` instead, which includes the private ones the token can read.
+def list_repos(client, owner, authenticated: !github_token.nil?)
+  return client.organization_repositories(owner, type: 'sources') if client.user(owner).type == 'Organization'
+
+  if authenticated && authenticated_login(client)&.casecmp?(owner)
+    client.repositories(nil, affiliation: 'owner').reject(&:fork)
+  else
+    client.repositories(owner, type: 'sources')
+  end
+end
+
 owner = ARGV[0].strip
-repos = if client.user(owner).type == 'Organization'
-          client.organization_repositories(owner, type: 'sources')
-        else
-          client.repositories(owner, type: 'sources')
-        end
+repos = list_repos(client, owner)
 puts "Found #{repos.count} repos. Counting..."
 
 # Pass the token to git as an HTTP header via environment config rather than
