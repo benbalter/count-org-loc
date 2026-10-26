@@ -55,20 +55,23 @@ class ListReposTest < Minitest::Test
 
   def test_token_without_user_identity_falls_back_to_public_listing
     client = FakeClient.new(login: 'me', identity: false)
-    list_repos(client, 'me', authenticated: true)
-    assert_equal [[:repositories, 'me', { type: 'sources' }]], client.calls
+    repos = list_repos(client, 'me', authenticated: true)
+    assert_equal [[:repositories, 'me']], client.calls
+    assert_equal ['a'], repos.map(&:name)
   end
 
   def test_other_user_keeps_public_listing
     client = FakeClient.new(login: 'me')
-    list_repos(client, 'someone', authenticated: true)
-    assert_equal [[:repositories, 'someone', { type: 'sources' }]], client.calls
+    repos = list_repos(client, 'someone', authenticated: true)
+    assert_equal [[:repositories, 'someone']], client.calls
+    assert_equal ['a'], repos.map(&:name)
   end
 
   def test_unauthenticated_keeps_public_listing
     client = FakeClient.new(login: 'me')
-    list_repos(client, 'me', authenticated: false)
-    assert_equal [[:repositories, 'me', { type: 'sources' }]], client.calls
+    repos = list_repos(client, 'me', authenticated: false)
+    assert_equal [[:repositories, 'me']], client.calls
+    assert_equal ['a'], repos.map(&:name)
   end
 
   def test_org_unchanged

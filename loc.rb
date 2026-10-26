@@ -58,7 +58,8 @@ def list_repos(client, owner, authenticated: !github_token.nil?)
   if authenticated && authenticated_login(client)&.casecmp?(owner)
     client.repositories(nil, affiliation: 'owner').reject(&:fork)
   else
-    client.repositories(owner, type: 'sources')
+    # `type: 'sources'` only applies to the org endpoint, so filter forks here.
+    client.repositories(owner).reject(&:fork)
   end
 end
 
