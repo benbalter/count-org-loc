@@ -33,6 +33,9 @@ jobs:
       - name: rubocop
         run: bundle exec rubocop
 
+      - name: test
+        run: bundle exec ruby -e 'Dir.glob("test/*_test.rb").each { |f| require File.expand_path(f) }'
+
       - name: count workflow dispatch
         if: github.event_name == 'workflow_dispatch'
         run: script/count ${{ inputs.org_or_user }}
