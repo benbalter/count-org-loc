@@ -1,15 +1,6 @@
 # frozen_string_literal: true
 
-require 'minitest/autorun'
-require 'octokit'
-
-# loc.rb runs on load, so pull out just the helper under test.
-SOURCE = File.read(File.expand_path('../loc.rb', __dir__))
-SOURCE.scan(/^def (?:authenticated_login|list_repos).*?^end$/m).each { |src| eval(src) } # rubocop:disable Security/Eval
-
-def github_token
-  ENV.fetch('GITHUB_TOKEN', nil)
-end
+require_relative 'test_helper'
 
 class ListReposTest < Minitest::Test
   Account = Struct.new(:login, :type)
@@ -27,6 +18,7 @@ class ListReposTest < Minitest::Test
 
     def user(name = nil)
       if name.nil?
+        raise @identity if @identity.is_a?(Class)
         raise Octokit::Forbidden unless @identity
 
         return Account.new(@login)
@@ -72,6 +64,23 @@ class ListReposTest < Minitest::Test
     repos = list_repos(client, 'me', authenticated: false)
     assert_equal [[:repositories, 'me']], client.calls
     assert_equal ['a'], repos.map(&:name)
+  end
+
+  def test_unauthorized_token_falls_back_to_public_listing
+    client = FakeClient.new(login: 'me', identity: Octokit::Unauthorized)
+    list_repos(client, 'me', authenticated: true)
+    assert_equal [[:repositories, 'me']], client.calls
+  end
+
+  def test_without_token_skips_the_authenticated_lookup
+    client = FakeClient.new(login: 'me')
+    def client.user(name = nil)
+      raise 'GET /user should not be called without a token' if name.nil?
+
+      super
+    end
+    with_token(nil) { list_repos(client, 'me') }
+    assert_equal [[:repositories, 'me']], client.calls
   end
 
   def test_org_unchanged
